@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0a0010; color: white; font-family: 'Inter', sans-serif; }
+
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes glow { 0%,100%{opacity:0.5} 50%{opacity:1} }
+@keyframes slide-up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse-ring { 0%{transform:scale(1);opacity:1} 100%{transform:scale(1.5);opacity:0} }
+
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-glow { animation: glow 3s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 0.6s ease forwards; }
+
+.gradient-text {
+  background: linear-gradient(135deg, #A78BFA, #7C3AED, #4F46E5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-light {
+  background: linear-gradient(135deg, #C4B5FD, #A78BFA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: rgba(124, 58, 237, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(167, 139, 250, 0.1);
+}
+
+.card-glow:hover {
+  border-color: rgba(124, 58, 237, 0.4);
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.15);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #7C3AED, #4F46E5);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #6D28D9, #4338CA);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
+}
+
+.grid-bg {
+  background-image: linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
