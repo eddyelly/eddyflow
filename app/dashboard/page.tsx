@@ -35,7 +35,7 @@ function Markdown({ content }: { content: string }) {
     .replace(/\n/g, '<br/>');
 
   // Wrap tables
-  const withTables = html.replace(/(<tr>.*?<\/tr>)+/gs, (match) =>
+  const withTables = html.replace(/(<tr>[\s\S]*?<\/tr>)+/g, (match) =>
     `<div class="overflow-x-auto my-3"><table class="w-full border-collapse border border-white/10 rounded-lg overflow-hidden text-sm">${match}</table></div>`
   );
 
