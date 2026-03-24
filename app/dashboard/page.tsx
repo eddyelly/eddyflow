@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const TEMPLATES = [
   { id: "dev", icon: "💻", name: "Dev Swarm", desc: "Architect → Code → Test → Review", agents: 12, color: "from-blue-500/20 to-indigo-500/20", border: "border-blue-500/30" },
@@ -67,8 +67,33 @@ export default function Dashboard() {
     }, 1500);
   }
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   return (
-    <main className="min-h-screen bg-[#0a0010] text-white">
+    <main className="min-h-screen bg-[#0a0010] text-white relative">
+
+      {/* Mobile wall */}
+      {isMobile && (
+        <div className="fixed inset-0 z-[100] bg-[#050008] flex flex-col items-center justify-center text-center px-8">
+          <div className="text-8xl mb-8 animate-bounce">💻</div>
+          <h2 className="text-3xl font-black mb-4">Switch to desktop</h2>
+          <p className="text-white/50 text-lg leading-relaxed mb-8">
+            The EddyFlow dashboard is designed for desktop browsers. Please open this page on a laptop or PC for the best experience.
+          </p>
+          <div className="glass rounded-2xl p-5 border border-violet-500/20 max-w-sm w-full">
+            <p className="text-sm text-white/40">Or browse on mobile:</p>
+            <a href="/" className="mt-3 block px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl font-bold text-sm transition-all hover:opacity-90">
+              ← Back to Homepage
+            </a>
+          </div>
+        </div>
+      )}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-[20%] w-[400px] h-[400px] rounded-full bg-violet-600/5 blur-[100px]" />
       </div>

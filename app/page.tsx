@@ -3,6 +3,18 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
+// ─── Mobile detection hook ───────────────────────────────────────────────────
+function useMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+}
+
 // ─── Scroll reveal hook ───────────────────────────────────────────────────────
 function useScrollReveal() {
   useEffect(() => {
@@ -133,6 +145,7 @@ export default function Home() {
   const [submitted, setSubmitted] = useState(false);
   const [visibleLogs, setVisibleLogs] = useState(1);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const isMobile = useMobile();
   useScrollReveal();
 
   // Animate logs
@@ -152,6 +165,21 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#050008] text-white overflow-hidden">
 
+      {/* ── Mobile Banner ── */}
+      {isMobile && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-violet-900/95 to-indigo-900/95 backdrop-blur-xl border-t border-violet-500/30 p-4 flex items-start gap-3 shadow-2xl">
+          <span className="text-2xl flex-shrink-0">💻</span>
+          <div>
+            <p className="font-bold text-sm text-white">Best on desktop</p>
+            <p className="text-white/60 text-xs mt-0.5">EddyFlow dashboard is optimized for PC. Use a laptop or desktop for the full experience.</p>
+          </div>
+          <button
+            onClick={() => document.querySelector(".mobile-banner")?.remove()}
+            className="ml-auto text-white/40 hover:text-white flex-shrink-0 text-lg leading-none"
+          >✕</button>
+        </div>
+      )}
+
       {/* ── Background ── */}
       <div className="fixed inset-0 pointer-events-none z-0">
         {/* Orbs with mouse parallax */}
@@ -168,7 +196,7 @@ export default function Home() {
 
       {/* ── Nav ── */}
       <nav className="relative z-20 border-b border-violet-500/10 backdrop-blur-2xl">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 animate-fade-in">
             <div className="relative">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center font-black text-base shadow-lg shadow-violet-500/40 animate-glow-pulse">E</div>
@@ -178,7 +206,7 @@ export default function Home() {
           </div>
 
           <div className="hidden md:flex items-center gap-8 text-sm text-white/50">
-            {["#swarms", "#features", "#how", "#pricing"].map((href, i) => (
+            {["#swarms", "#features", "#how", "#pricing"].map((href) => (
               <a key={href} href={href} className="hover:text-white transition-colors relative group">
                 {href.slice(1).charAt(0).toUpperCase() + href.slice(2)}
                 <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-violet-400 group-hover:w-full transition-all duration-300" />
@@ -186,10 +214,10 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="flex items-center gap-3 animate-fade-in">
-            <Link href="/auth" className="text-sm text-white/50 hover:text-white transition-colors">Sign in</Link>
-            <Link href="/auth" className="relative px-5 py-2.5 btn-primary rounded-xl text-sm font-bold shadow-lg shadow-violet-500/30 overflow-hidden">
-              <span className="relative z-10">Get Started Free →</span>
+          <div className="flex items-center gap-2 md:gap-3 animate-fade-in">
+            <Link href="/auth" className="hidden sm:block text-sm text-white/50 hover:text-white transition-colors">Sign in</Link>
+            <Link href="/auth" className="relative px-4 md:px-5 py-2 md:py-2.5 btn-primary rounded-xl text-sm font-bold shadow-lg shadow-violet-500/30 overflow-hidden">
+              <span className="relative z-10">Get Started →</span>
             </Link>
           </div>
         </div>
@@ -198,7 +226,7 @@ export default function Home() {
       <div className="relative z-10">
 
         {/* ── Hero ── */}
-        <section className="max-w-6xl mx-auto px-6 pt-32 pb-20 text-center">
+        <section className="max-w-6xl mx-auto px-4 md:px-6 pt-20 md:pt-32 pb-16 md:pb-20 text-center">
           <div className="animate-slide-up" style={{ animationDelay: "0.1s", opacity: 0 }}>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-violet-300 mb-10 border border-violet-500/20 hover:border-violet-500/40 transition-all cursor-default group">
               <div className="relative">
@@ -211,7 +239,7 @@ export default function Home() {
           </div>
 
           <div className="animate-slide-up" style={{ animationDelay: "0.2s", opacity: 0 }}>
-            <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9] tracking-tight">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black mb-6 leading-[0.9] tracking-tight">
               Deploy{" "}
               <TypeWriter words={["AI swarms", "Dev agents", "Research bots", "Content teams"]} />
               <br />
@@ -220,7 +248,7 @@ export default function Home() {
           </div>
 
           <div className="animate-slide-up" style={{ animationDelay: "0.3s", opacity: 0 }}>
-            <p className="text-xl md:text-2xl text-white/40 max-w-2xl mx-auto mb-12 leading-relaxed font-light">
+            <p className="text-base sm:text-xl md:text-2xl text-white/40 max-w-2xl mx-auto mb-10 md:mb-12 leading-relaxed font-light">
               No CLI. No config. No setup. Just pick a template,
               add your API key, and watch <span className="text-violet-300">60+ coordinated agents</span> work for you.
             </p>
