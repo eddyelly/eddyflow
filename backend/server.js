@@ -77,13 +77,22 @@ wss.on("connection", (ws) => {
     }
 
     const { apiKey, swarmId, task } = payload;
+    // payload also contains customAgents if swarmId === "custom"
 
     if (!apiKey || !swarmId || !task) {
       ws.send(JSON.stringify({ type: "error", message: "Missing apiKey, swarmId, or task" }));
       return;
     }
 
-    const config = SWARM_CONFIGS[swarmId];
+    let config;
+    if (swarmId === "custom" && payload.customAgents) {
+      config = {
+        name: "Custom Swarm",
+        agents: payload.customAgents.map(a => ({ name: a.name, role: a.role })),
+      };
+    } else {
+      config = SWARM_CONFIGS[swarmId];
+    }
     if (!config) {
       ws.send(JSON.stringify({ type: "error", message: "Unknown swarm template" }));
       return;
